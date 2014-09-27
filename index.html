@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>The Legend of Korra, Book 4 Filterable Gallery</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
+  <script src="js/isotope.pkgd.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+  <div class="container-fluid">
+
+    <h1>The Legend of Korra, Book 4 Filterable Gallery</h1>
+
+    <p>This is just a filterable gallery of screengrabs from the <a href="http://www.nick.com/videos/clip/korra-book-4-trailer-89471257.html?xid=korranation">Legend of Korra Book 4 Trailer</a> (<a href="https://www.youtube.com/watch?v=NCEFMY4TWGw">YouTube</a>).</p>
+
+    <p>Thanks to <a href="http://isotope.metafizzy.co/">Isotope</a>, <a href="http://imgur.com/a/HgySj">http://imgur.com/a/HgySj</a> from <a href="http://www.reddit.com/user/unsilviu">/u/unsilviu</a>, and <a href="http://imgur.com/a/Y0Wa3">http://imgur.com/a/Y0Wa3</a> from <a href="http://www.reddit.com/user/N7Progman">/u/N7Progman</a>.</p>
+
+    <p id="special-filters">
+      <button type="button" class="btn btn-primary btn-spaced" id="select-none">Select None</button>
+      <button type="button" class="btn btn-primary btn-spaced" id="select-all">Select All</button>
+    </p>
+
+    <p id="special-actions">
+      <button type="button" class="btn btn-primary btn-spaced" id="collapse-all">Collapse All</button>
+      <button type="button" class="btn btn-primary btn-spaced" id="expand-all">Expand All</button>
+    </p>
+
+    <p id="filters">
+    </p>
+
+    <div id="isotope-container">
+    </div>
+
+  </div>
+
+  <script type="text/template" id="filter-template">
+    <button type="button" class="btn btn-primary btn-spaced filter-toggle" id="<%= name %>"><%= name %></button>
+  </script>
+
+  <script type="text/template" id="box-template">
+    <div class="block block-normal <%= tags %>">
+      <a href="#" onClick="return false;"><img src="<%= url %>" style="width: 100%;"></a>
+    </div>
+  </script>
+
+  <script>
+    var images = [
+      { url: 'http://i.imgur.com/BWSVdqF.png', tags: 'Korra' },
+      { url: 'http://i.imgur.com/BkQLsyz.png', tags: 'Opal Kai' },
+      { url: 'http://i.imgur.com/HMeWTzH.jpg', tags: 'Kuvira' },
+      { url: 'http://i.imgur.com/ZHVGFjO.jpg', tags: 'Mecha' },
+      { url: 'http://i.imgur.com/zpJtzOo.png', tags: 'Korra' },
+      { url: 'http://i.imgur.com/ZIxQbzf.png', tags: 'Wei Wing Suyin' },
+      { url: 'http://i.imgur.com/xXDcq4p.jpg', tags: 'Mecha Airship' },
+      { url: 'http://i.imgur.com/qXZ1K51.png', tags: 'Korra' },
+      { url: 'http://i.imgur.com/MaYcjEf.png', tags: 'Mecha' },
+      { url: 'http://i.imgur.com/Hv4N3ZH.png', tags: 'Korra' },
+      { url: 'http://i.imgur.com/FoocMLy.jpg', tags: 'Kuvira Gun' },
+      { url: 'http://i.imgur.com/FroA6OQ.jpg', tags: 'Korra' },
+      { url: 'http://i.imgur.com/ctEbtb4.jpg', tags: 'Mecha' },
+      { url: 'http://i.imgur.com/2cU8Lmo.png', tags: 'Kuvira' },
+      { url: 'http://i.imgur.com/a5cOsMj.png', tags: 'Kuvira' },
+      { url: 'http://i.imgur.com/yLmhsVx.png', tags: 'Bolin' },
+      { url: 'http://i.imgur.com/VTqTi1N.png', tags: 'Korra' },
+      { url: 'http://i.imgur.com/APHxciO.jpg', tags: 'Korra' },
+      { url: 'http://i.imgur.com/pdjFvUn.png', tags: 'Opal' },
+      { url: 'http://i.imgur.com/QCHvzd7.png', tags: 'Zuko Firelord Raiko Tenzin' },
+      { url: 'http://i.imgur.com/cMkQMVS.png', tags: 'Korra' },
+      { url: 'http://i.imgur.com/gDdlIPw.png', tags: 'Korra' },
+      { url: 'http://i.imgur.com/fIill5r.jpg', tags: 'Korra Mako WhiteLotus' },
+      { url: 'http://i.imgur.com/ovQBtuR.png', tags: 'ZhuLi Mecha' },
+      { url: 'http://i.imgur.com/BaQ8rbF.png', tags: 'Korra' },
+
+      { url: 'http://i.imgur.com/8R6Cisc.png', tags: '' },
+      { url: 'http://i.imgur.com/sStVZMD.png', tags: 'Korra' },
+      { url: 'http://i.imgur.com/mu0c0Ug.png', tags: 'Katara' },
+      { url: 'http://i.imgur.com/vD3u8sN.png', tags: 'Korra' },
+      { url: 'http://i.imgur.com/dvW6jI8.png', tags: 'Korra' },
+      { url: 'http://i.imgur.com/gmhO8GI.png', tags: 'Korra' },
+      { url: 'http://i.imgur.com/3ETJ0bh.png', tags: 'Korra' },
+      { url: 'http://i.imgur.com/BxyCkEl.png', tags: 'Korra' },
+      { url: 'http://i.imgur.com/Am1BKvF.png', tags: 'Korra' },
+      { url: 'http://i.imgur.com/0eNcPK2.png', tags: 'Korra' },
+      { url: 'http://i.imgur.com/yhxOJJ2.png', tags: '' },
+      { url: 'http://i.imgur.com/x5yX0vE.png', tags: 'Korra' },
+      { url: 'http://i.imgur.com/pa75G0y.png', tags: 'Korra' },
+      { url: 'http://i.imgur.com/AgMMybM.png', tags: 'Korra' },
+      { url: 'http://i.imgur.com/2KUh6B4.png', tags: 'Korra' },
+      { url: 'http://i.imgur.com/GpcOGMq.png', tags: 'Korra' },
+      { url: 'http://i.imgur.com/ntSsOm6.png', tags: 'Korra' },
+      { url: 'http://i.imgur.com/Z9yGKri.png', tags: 'Korra' },
+      { url: 'http://i.imgur.com/xHxdRhp.png', tags: 'Korra' },
+      { url: 'http://i.imgur.com/BzACqvM.png', tags: 'Korra Toph' },
+      { url: 'http://i.imgur.com/F4A1Uqx.png', tags: 'Ikki Jinora Meelo' },
+      { url: 'http://i.imgur.com/R9Cpg9T.png', tags: 'Ikki Jinora Meelo' },
+      { url: 'http://i.imgur.com/4KioDN0.png', tags: 'Zuko Firelord Raiko Tenzin' },
+      { url: 'http://i.imgur.com/6xHolNU.png', tags: 'Jinora' },
+      { url: 'http://i.imgur.com/NSNjbZr.png', tags: 'Opal Kai' },
+      { url: 'http://i.imgur.com/psrgaBF.png', tags: 'Kai' },
+      { url: 'http://i.imgur.com/JyxzFbs.png', tags: 'Korra' },
+      { url: 'http://i.imgur.com/nT5gm0V.png', tags: 'Mako' },
+      { url: 'http://i.imgur.com/A2cX5u2.png', tags: 'Korra Mako Asami' },
+      { url: 'http://i.imgur.com/oi1JXe3.png', tags: 'Korra' },
+      { url: 'http://i.imgur.com/dHxhv7G.png', tags: 'Asami' },
+      { url: 'http://i.imgur.com/ApvAfBi.png', tags: 'Asami' },
+      { url: 'http://i.imgur.com/4tJNLhy.png', tags: 'Korra Asami' },
+      { url: 'http://i.imgur.com/pR3kehR.png', tags: 'Korra Asami' },
+      { url: 'http://i.imgur.com/BpRGlFz.png', tags: 'Korra Mako' },
+      { url: 'http://i.imgur.com/4yeQOkN.png', tags: 'Korra Mako' },
+      { url: 'http://i.imgur.com/pQIFTNE.png', tags: 'Korra' },
+      { url: 'http://i.imgur.com/j3IGTpB.png', tags: 'Korra' },
+      { url: 'http://i.imgur.com/uSYGhlx.png', tags: 'Korra' },
+      { url: 'http://i.imgur.com/ZZXetnb.png', tags: 'Kuvira Gun' },
+      { url: 'http://i.imgur.com/PeXGU3x.png', tags: 'Airship Mecha' },
+      { url: 'http://i.imgur.com/0DGo4i1.png', tags: 'Suyin Wei Wing' },
+      { url: 'http://i.imgur.com/pEG2O0n.png', tags: 'Opal' },
+      { url: 'http://i.imgur.com/Nn4JOb7.png', tags: 'Mecha' },
+      { url: 'http://i.imgur.com/DuaRU7F.png', tags: 'Kuvira Mecha' },
+      { url: 'http://i.imgur.com/JJFO60A.png', tags: 'Kuvira' },
+      { url: 'http://i.imgur.com/il1eOkB.png', tags: 'Korra' },
+      { url: 'http://i.imgur.com/rGep7JL.png', tags: 'Korra' },
+      { url: 'http://i.imgur.com/UmPAPS0.png', tags: 'Kuvira' },
+      { url: 'http://i.imgur.com/DIH7UJ4.png', tags: 'Kuvira' },
+      { url: 'http://i.imgur.com/43pHI1k.png', tags: 'Korra' },
+      { url: 'http://i.imgur.com/sIPVtye.png', tags: 'Mecha' },
+      { url: 'http://i.imgur.com/UjSDvqX.png', tags: 'Mecha' },
+      { url: 'http://i.imgur.com/zogEzCI.png', tags: 'Mecha' },
+      { url: 'http://i.imgur.com/CFLKCsi.png', tags: 'Bolin Mecha' },
+      { url: 'http://i.imgur.com/JUOFvSr.png', tags: 'Bolin Mecha' },
+      { url: 'http://i.imgur.com/VXyuwEA.png', tags: 'Bolin' },
+      { url: 'http://i.imgur.com/lHE2z3b.png', tags: 'Bolin' },
+      { url: 'http://i.imgur.com/sV5jgFe.png', tags: 'ZhuLi' },
+      { url: 'http://i.imgur.com/rbEO9wQ.png', tags: 'Varrick' },
+      { url: 'http://i.imgur.com/KLa3vmw.png', tags: 'Bolin' },
+      { url: 'http://i.imgur.com/YclCNqH.png', tags: 'Bolin' },
+      { url: 'http://i.imgur.com/pGaiZP0.png', tags: 'Unknown' },
+    ];
+
+    // Collect all of the tags present in the image array.
+    tags = _.chain(images)
+      .pluck('tags')
+      .map(function(i) { return i.split(' '); })
+      .flatten()
+      .uniq()
+      .filter(function(i) { return i.length > 0; })
+      .sort()
+      .value();
+
+    // Do stuff on window load.
+    $(window).load(function(e) {
+
+      // Grab some jQuery handles.
+      var $filterbox = $('#filters');
+      var $isobox = $('#isotope-container');
+
+      // Populate the filters.
+      var filter_template = _.template($('#filter-template').html());
+      tags.forEach(function(character) {
+        $filterbox.append(filter_template({name: character}));
+      });
+
+      // This function goes through all filter toggles and constructs the
+      // filter selector.
+      function updateFilter() {
+        var filter = _.chain($('.filter-toggle'))
+          .filter(function(i) { return $(i).hasClass('btn-primary'); })
+          .map(function(i) { return '.' + $(i).attr('id'); })
+          .value()
+          .join(',');
+        $isobox.isotope({
+          filter: filter == '' ? '.none' : filter
+        });
+      }
+
+      // Turns off all filters.
+      $('#select-none').on('click', function(e) {
+        var $buttons = $('.filter-toggle');
+        $buttons.removeClass('btn-primary');
+        $buttons.addClass('btn-default');
+        updateFilter();
+      });
+
+      // Turns on all filters.
+      $('#select-all').on('click', function(e) {
+        var $buttons = $('.filter-toggle');
+        $buttons.addClass('btn-primary');
+        $buttons.removeClass('btn-default');
+        updateFilter();
+      });
+
+      // Collapses/shrinks all images.
+      $('#collapse-all').on('click', function(e) {
+        var $blocks = $('.block');
+        $blocks.addClass('block-normal');
+        $blocks.removeClass('block-big');
+        $isobox.isotope();
+      });
+
+      // Expands all images.
+      $('#expand-all').on('click', function(e) {
+        var $blocks = $('.block');
+        $blocks.removeClass('block-normal');
+        $blocks.addClass('block-big');
+        $isobox.isotope();
+      });
+
+      // Add filter event handlers.
+      $('.filter-toggle').on('click', function(e) {
+        var $button = $(e.target);
+        $button.toggleClass('btn-default');
+        $button.toggleClass('btn-primary');
+        updateFilter();
+      });
+
+      // Populate our blocks.
+      var block_template = _.template($('#box-template').html());
+      images.forEach(function(image) {
+        $isobox.append(block_template(image));
+      });
+
+      // Add image expansion toggling.
+      $('.block').on('click', function(e) {
+        var $block = $(e.target).parent().parent();
+        $block.toggleClass('block-normal');
+        $block.toggleClass('block-big');
+        $isobox.isotope();
+      });
+
+      // Initialize our Isotope container.
+      $isobox.isotope({
+        itemSelector: '.block',
+        filter: '*',
+        animationOptions: {
+          duration: 640,
+          easing: 'linear',
+          queue: false
+        }
+      });
+
+    });
+  </script>
+</body>
+
+</html>
